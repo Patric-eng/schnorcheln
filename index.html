@@ -100,13 +100,13 @@ const COAST={N:{lat:9.84,lon:100.02},W:{lat:9.74,lon:99.93},E:{lat:9.74,lon:100.
 const WX={lat:9.75,lon:100.02};
 const GEN='Über Sand einsteigen (im Satellitenbild hell), dunkle Flecken sind Riff. Flossen erst im brusttiefen Wasser anziehen.';
 const SPOTS=[
- {name:'Koh Ma / Mae Haad',near:'ca. 10 Min. mit dem Roller',coast:'N',face:330,sh:1,cur:true,q:'Koh Ma Koh Phangan',entry:'Am Mae Haad Strand rein und über die Sandbank Richtung Koh Ma. Das Riff liegt rund um die Insel.'},
- {name:'Haad Khom',near:'direkt nebenan',coast:'N',face:15,sh:.8,q:'Haad Khom Beach Koh Phangan',entry:'In der Mitte der Bucht über Sand rein, nicht an den Rändern. Das Riff liegt an den Seiten der Bucht. Flossen erst im brusttiefen Wasser anziehen.'},
- {name:'Chaloklum',near:'vor Ort',coast:'N',face:0,sh:.9,q:'Chaloklum Beach Koh Phangan',entry:GEN},
- {name:'Haad Salad',near:'ca. 15 Min. mit dem Roller',coast:'W',face:300,sh:.7,q:'Haad Salad Beach Koh Phangan',entry:GEN},
- {name:'Haad Yao',coast:'W',face:270,sh:.7,q:'Haad Yao Beach Koh Phangan',entry:GEN},
- {name:'Haad Chao Phao',coast:'W',face:255,sh:.85,q:'Haad Chao Phao Koh Phangan',entry:GEN},
- {name:'Bottle Beach',near:'Longtail-Boot ab Chaloklum',coast:'N',face:0,sh:.4,q:'Bottle Beach Koh Phangan',entry:GEN},
+ {name:'Koh Ma / Mae Haad',near:'ca. 10 Min. mit dem Roller',coast:'N',face:330,sh:1,cur:true,lat:9.79861,lon:99.98007,q:'Koh Ma Koh Phangan',entry:'Zur Sandbank Richtung Koh Ma laufen und auf der rechten Seite reingehen (Blick Richtung Insel), dort ist es ruhiger. Das Riff liegt rund um die Insel.'},
+ {name:'Haad Khom',near:'direkt nebenan',coast:'N',face:15,sh:.8,lat:9.79745,lon:100.01442,q:'Haad Khom Beach Koh Phangan',entry:'In der Mitte der Bucht über Sand rein, nicht an den Rändern. Das Riff liegt an den Seiten der Bucht. Flossen erst im brusttiefen Wasser anziehen.'},
+ {name:'Chaloklum',near:'vor Ort',coast:'N',face:0,sh:.9,lat:9.78687,lon:100.00428,q:'Chaloklum Beach Koh Phangan',entry:GEN},
+ {name:'Haad Salad',near:'ca. 15 Min. mit dem Roller',coast:'W',face:300,sh:.7,lat:9.78582,lon:99.97253,q:'Haad Salad Beach Koh Phangan',entry:GEN},
+ {name:'Haad Yao',coast:'W',face:270,sh:.7,lat:9.77540,lon:99.96621,q:'Haad Yao Beach Koh Phangan',entry:GEN},
+ {name:'Haad Chao Phao',coast:'W',face:255,sh:.85,lat:9.76485,lon:99.96237,q:'Haad Chao Phao Koh Phangan',entry:GEN},
+ {name:'Bottle Beach',near:'Longtail-Boot ab Chaloklum',coast:'N',face:0,sh:.4,lat:9.79220,lon:100.03623,q:'Bottle Beach Koh Phangan',entry:GEN},
  {name:'Thong Nai Pan Noi',coast:'E',face:60,sh:.5,q:'Thong Nai Pan Noi Koh Phangan',entry:GEN}
 ];
 const DIRS=['N','NO','O','SO','S','SW','W','NW'];
@@ -186,7 +186,7 @@ function score(sp,i){
 }
 const verdict=s=>s>=70?['Gut','var(--good)']:s>=45?['Okay','var(--ok)']:['Lieber nicht','var(--bad)'];
 const tideTxt=ti=>ti?(ti.t>.66?'Wasser hoch':ti.t>.33?'Wasser mittel':'Wasser niedrig')+(ti.rising?', steigend':', fallend'):'Wasserstand unbekannt';
-const mapUrl=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const mapUrl=sp=>sp.lat?`https://maps.apple.com/?ll=${sp.lat},${sp.lon}&q=${encodeURIComponent('Einstieg '+sp.name)}&t=k&z=18`:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(sp.q);
 
 function bestTime(sp,i0){
   let best=null;
@@ -215,13 +215,13 @@ function render(){
     ${top.r.cur?'<span class="chip hot">Starke Strömung an der Sandbank</span>':''}
     <span class="chip">Regen 24 h: ${fmt(top.r.rain)} mm</span>
    </div>
-   <div class="entry"><b>Einstieg${getNote(top.sp.name)?' (deine Notiz)':''}:</b> ${entryOf(top.sp)} <a href="${mapUrl(top.sp.q)}">Karte öffnen</a></div>`;
+   <div class="entry"><b>Einstieg${getNote(top.sp.name)?' (deine Notiz)':''}:</b> ${entryOf(top.sp)} <a href="${mapUrl(top.sp)}">Einstieg auf Karte zeigen</a></div>`;
   $('list').innerHTML=rows.map(({sp,r,b})=>{const [vt,c]=verdict(r.total);return `<div class="spot">
     <div class="num" style="color:${c}">${r.total}</div>
     <div><div class="n">${sp.name} <span class="meta">· ${vt}</span></div>
      <div class="bar"><i style="width:${r.total}%;background:${c}"></i></div>
      <div class="meta">Welle an diesem Strand ca. ${fmt(r.effW)} m · ${tideTxt(r.ti)}${b?` · Beste Zeit: ${tLabel(D.times[b.i])} (${b.s})`:''}${r.cur?' · <b style="color:var(--coral)">Starke Strömung an der Sandbank</b>':''}</div>
-     <details data-n="${esc(sp.name)}" ${open.has(sp.name)?'open':''}><summary>Einstieg &amp; Notiz</summary><p style="margin:6px 0">${sp.entry} <a href="${mapUrl(sp.q)}">Karte öffnen</a></p>
+     <details data-n="${esc(sp.name)}" ${open.has(sp.name)?'open':''}><summary>Einstieg &amp; Notiz</summary><p style="margin:6px 0">${sp.entry} <a href="${mapUrl(sp)}">Einstieg auf Karte zeigen</a></p>
       <label class="meta" for="n-${SPOTS.indexOf(sp)}">Deine Notiz (ersetzt oben den Tipp)</label>
       <textarea id="n-${SPOTS.indexOf(sp)}" data-n="${esc(sp.name)}" rows="2" placeholder="z. B. Einstieg links vom Restaurant">${esc(getNote(sp.name))}</textarea></details></div></div>`}).join('');
   renderCl(i0);
