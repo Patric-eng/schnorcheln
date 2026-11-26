@@ -109,6 +109,10 @@ const SPOTS=[
  {name:'Bottle Beach',near:'Longtail-Boot ab Chaloklum',coast:'N',face:0,sh:.4,lat:9.79220,lon:100.03623,q:'Bottle Beach Koh Phangan',entry:GEN},
  {name:'Thong Nai Pan Noi',coast:'E',face:60,sh:.5,q:'Thong Nai Pan Noi Koh Phangan',entry:GEN}
 ];
+const REEF={'Koh Ma / Mae Haad':1,'Haad Khom':.8,'Haad Salad':.6,'Haad Yao':.6,'Haad Chao Phao':.45,'Thong Nai Pan Noi':.4,'Chaloklum':.35,'Bottle Beach':.35};
+SPOTS.forEach(s=>s.reef=REEF[s.name]??.5);
+const reefTxt=r=>r>=.9?'Riff: top':r>=.7?'Riff: schön':r>=.5?'Riff: mittel':'Riff: eher wenig';
+const visTxt=v=>v>=.75?'Sicht gut':v>=.5?'Sicht mittel':'Sicht schlecht';
 const DIRS=['N','NO','O','SO','S','SW','W','NW'];
 const dirTxt=d=>DIRS[Math.round(((d%360)+360)%360/45)%8];
 const clamp=x=>Math.max(0,Math.min(1,x));
@@ -182,7 +186,8 @@ function score(sp,i){
   let rain=0;for(let j=Math.max(0,i-24);j<=i;j++)rain+=w.precipitation[j]||0;
   const visS=clamp(1-rain/30);
   let total=100*(.4*waveS+.2*windS+.25*tideS+.15*visS)*Math.min(1,waveS*2+.1)*(cur?.8:1);
-  return {cur,kd,total:Math.round(total),wh,wd,effW,wind:w.wind_speed_10m[i],windD:w.wind_direction_10m[i],ti,rain,day:isDay(D.times[i])};
+  const vis=clamp(.6*visS+.4*waveS);total*=.45+.55*sp.reef;
+  return {vis,reef:sp.reef,cur,kd,total:Math.round(total),wh,wd,effW,wind:w.wind_speed_10m[i],windD:w.wind_direction_10m[i],ti,rain,day:isDay(D.times[i])};
 }
 const verdict=s=>s>=70?['Gut','var(--good)']:s>=45?['Okay','var(--ok)']:['Lieber nicht','var(--bad)'];
 const tideTxt=ti=>ti?(ti.t>.66?'Wasser hoch':ti.t>.33?'Wasser mittel':'Wasser niedrig')+(ti.rising?', steigend':', fallend'):'Wasserstand unbekannt';
@@ -213,6 +218,8 @@ function render(){
     <span class="chip">${tideTxt(top.r.ti)}</span>
     ${top.r.kd==='spring'?`<span class="chip hot">${top.r.ti&&top.r.ti.t>.5?'Flut heute extra hoch':'Ebbe heute extra flach'}</span>`:top.r.kd==='neap'?'<span class="chip">Wasser schwankt heute kaum</span>':''}
     ${top.r.cur?'<span class="chip hot">Starke Strömung an der Sandbank</span>':''}
+    <span class="chip">${reefTxt(top.r.reef)}</span>
+    <span class="chip">${visTxt(top.r.vis)}</span>
     <span class="chip">Regen 24 h: ${fmt(top.r.rain)} mm</span>
    </div>
    <div class="entry"><b>Einstieg${getNote(top.sp.name)?' (deine Notiz)':''}:</b> ${entryOf(top.sp)} <a href="${mapUrl(top.sp)}">Einstieg auf Karte zeigen</a></div>`;
@@ -220,7 +227,7 @@ function render(){
     <div class="num" style="color:${c}">${r.total}</div>
     <div><div class="n">${sp.name} <span class="meta">· ${vt}</span></div>
      <div class="bar"><i style="width:${r.total}%;background:${c}"></i></div>
-     <div class="meta">Welle an diesem Strand ca. ${fmt(r.effW)} m · ${tideTxt(r.ti)}${b?` · Beste Zeit: ${tLabel(D.times[b.i])} (${b.s})`:''}${r.cur?' · <b style="color:var(--coral)">Starke Strömung an der Sandbank</b>':''}</div>
+     <div class="meta">${reefTxt(r.reef)} · ${visTxt(r.vis)} · Welle an diesem Strand ca. ${fmt(r.effW)} m · ${tideTxt(r.ti)}${b?` · Beste Zeit: ${tLabel(D.times[b.i])} (${b.s})`:''}${r.cur?' · <b style="color:var(--coral)">Starke Strömung an der Sandbank</b>':''}</div>
      <details data-n="${esc(sp.name)}" ${open.has(sp.name)?'open':''}><summary>Einstieg &amp; Notiz</summary><p style="margin:6px 0">${sp.entry} <a href="${mapUrl(sp)}">Einstieg auf Karte zeigen</a></p>
       <label class="meta" for="n-${SPOTS.indexOf(sp)}">Deine Notiz (ersetzt oben den Tipp)</label>
       <textarea id="n-${SPOTS.indexOf(sp)}" data-n="${esc(sp.name)}" rows="2" placeholder="z. B. Einstieg links vom Restaurant">${esc(getNote(sp.name))}</textarea></details></div></div>`}).join('');
