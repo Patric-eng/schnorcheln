@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Schnorcheln">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Schnorcheln Koh Phangan</title>
+<style>
+/* VOICE: ruhig, edel, ein Blick genügt
+   IDEA: Blick durch die Taucherbrille in tiefes Meer
+   PICTURE: großer Bestwert in Gold + Wasserstandskurve
+   COLOUR: Tiefseeblau, Glas, Gold
+   LAYOUT: eine Spalte, mobil zuerst */
+:root{color-scheme:dark;
+--bg:#03122a;--card:rgba(255,255,255,.06);--glass-b:rgba(255,255,255,.13);--ink:#eaf2ff;
+--mute:#9db2cf;--sea:#5cc8ff;--sea2:rgba(92,200,255,.16);
+--coral:#e9c46a;--gold:#e9c46a;--gold2:#f7dc8c;--hero:rgba(255,255,255,.08);--good:#3fd3a0;--ok:#e8a23d;--bad:#ff6b6b;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box;min-width:0}
+html{background:#020b1c}
+body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;overflow-x:clip;
+background:radial-gradient(120% 60% at 50% -10%,#1a5f9e 0%,#0b3466 30%,#05183a 60%,#020b1c 100%) fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+background:radial-gradient(40% 30% at 15% 20%,rgba(92,200,255,.18),transparent 70%),radial-gradient(35% 25% at 90% 45%,rgba(233,196,106,.08),transparent 70%),radial-gradient(50% 30% at 50% 100%,rgba(20,90,160,.35),transparent 70%)}
+main{max-width:720px;margin:0 auto;padding:18px max(4vw,14px) 48px}
+h1{font-size:22px;margin:4px 0 4px;font-weight:700;display:flex;align-items:center;gap:10px;letter-spacing:-.01em}h1 img{width:36px;height:36px;border-radius:10px;box-shadow:0 0 0 1px rgba(233,196,106,.5)}
+.sub{color:var(--mute);font-size:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button{font:inherit;font-weight:600;border:1px solid var(--glass-b);background:rgba(255,255,255,.07);color:var(--ink);border-radius:999px;min-height:40px;padding:0 16px;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+button:hover{border-color:rgba(233,196,106,.6)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card,.hero{background:var(--card);border:1px solid var(--glass-b);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);box-shadow:0 10px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.hero{margin-top:14px;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border-color:rgba(233,196,106,.45);color:#fff;border-radius:24px;padding:22px;box-shadow:0 10px 50px rgba(0,0,0,.4),0 0 40px rgba(233,196,106,.12),inset 0 1px 0 rgba(255,255,255,.18)}
+.hero .lbl{font-size:14px;color:var(--gold2);font-weight:600}
+.hero .name{font-size:clamp(30px,8vw,44px);font-weight:700;line-height:1.05;margin:4px 0 8px;letter-spacing:-.02em}
+.hero .row{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.hero .score{font-size:60px;font-weight:700;line-height:1;background:linear-gradient(180deg,#fff1c4,#e9c46a 55%,#b8892b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .verdict{font-size:18px;font-weight:600}
+.hero .entry{margin-top:14px;font-size:15px;background:rgba(2,11,28,.45);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.hero a{color:var(--gold2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.chip.hot{background:linear-gradient(180deg,#f7dc8c,#e0b54e);border-color:transparent;color:#1d1503;font-weight:700}.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:1px 8px;margin-left:6px;background:var(--sea2)}.tag.hot{background:linear-gradient(180deg,#f7dc8c,#e0b54e);color:#1d1503}
+.arr{width:14px;height:14px;flex:none}
+.card{border-radius:22px;padding:16px;margin-top:14px}
+.card h2{font-size:17px;margin:0 0 8px}
+.time{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--gold);height:44px}
+.fig{position:relative;height:170px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.spot{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.spot:first-of-type{border-top:0}
+.num{font-size:22px;font-weight:700;text-align:right}
+.spot .n{font-weight:700}
+.bar{height:6px;background:rgba(255,255,255,.08);border-radius:9px;margin:6px 0;overflow:hidden}.bar i{display:block;height:100%;border-radius:9px}
+.meta{font-size:13px;color:var(--mute)}
+.spot details{font-size:14px;margin-top:4px}.spot summary{cursor:pointer;color:var(--gold2);font-weight:600;min-height:28px}
+.spot a,.card a{color:var(--gold2)}
+.strip{display:grid;grid-template-columns:52px repeat(11,minmax(0,1fr));gap:3px;align-items:center;margin-top:4px}
+.strip span{font-size:12px;color:var(--mute)}
+.strip button{min-height:26px;padding:0;border:0;border-radius:6px;backdrop-filter:none}
+.strip button.past{opacity:.2}
+.hrs{display:grid;grid-template-columns:52px repeat(11,minmax(0,1fr));gap:3px;font-size:11px;color:var(--mute);text-align:center}
+.cl{padding:12px 0;border-top:1px solid var(--line)}.cl:first-of-type{border-top:0}
+.win{font-size:14px;margin-top:2px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--mute);margin-top:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+textarea{width:100%;font:16px/1.4 inherit;font-family:inherit;color:var(--ink);background:rgba(2,11,28,.45);border:1px solid var(--glass-b);border-radius:12px;padding:10px;margin-top:4px;resize:vertical}
+textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.note{font-size:13px;color:var(--mute);margin-top:18px}
+.err{background:rgba(255,107,107,.18);border:1px solid var(--bad);color:#fff;border-radius:14px;padding:12px 14px;margin-top:14px;display:none}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .4s}}
+</style>
+</head>
+<body>
+<main>
+  <h1><img src="logo.svg" alt="">Schnorcheln Koh Phangan</h1>
+  <div class="sub"><span id="upd">Lade Daten …</span><button id="reload" type="button">Aktualisieren</button></div>
+  <div class="err" id="err"></div>
+
+  <section class="hero" id="hero"><div class="lbl">Bester Spot</div><div class="name">…</div></section>
+
+  <section class="card"><h2>Rund um Chaloklum – beste Zeiten</h2><div id="cl"></div>
+    <div class="legend"><span><i style="background:var(--good)"></i>Gut</span><span><i style="background:var(--ok)"></i>Okay</span><span><i style="background:var(--bad)"></i>Lieber nicht</span><span>Tippen zeigt die Stunde oben an</span></div></section>
+
+  <section class="card">
+    <div class="time"><span id="tlabel">Jetzt</span><button id="now" type="button">Jetzt</button></div>
+    <input id="slider" type="range" min="0" max="47" value="0" aria-label="Uhrzeit wählen">
+    <div class="fig"><svg id="tide" role="img" aria-label="Wasserstand der nächsten 48 Stunden"></svg></div>
+    <div class="meta" id="tidetxt"></div>
+  </section>
+
+  <section class="card"><h2>Alle Spots</h2><div id="list"></div></section>
+
+  <p class="note">Daten: Open-Meteo (Wellen- und Wettermodell), aktualisiert sich alle 30 Minuten. Das Modell rechnet in einem Raster von einigen Kilometern. Vor Ort zählt immer, was du selbst siehst.</p>
+</main>
+
+<script>
+{
+const COAST={N:{lat:9.84,lon:100.02},W:{lat:9.74,lon:99.93},E:{lat:9.74,lon:100.12}};
+const WX={lat:9.75,lon:100.02};
+const GEN='Über Sand einsteigen (im Satellitenbild hell), dunkle Flecken sind Riff. Flossen erst im brusttiefen Wasser anziehen.';
+const SPOTS=[
+ {name:'Koh Ma / Mae Haad',near:'ca. 10 Min. mit dem Roller',coast:'N',face:330,sh:1,cur:true,q:'Koh Ma Koh Phangan',entry:'Am Mae Haad Strand rein und über die Sandbank Richtung Koh Ma. Das Riff liegt rund um die Insel.'},
+ {name:'Haad Khom',near:'direkt nebenan',coast:'N',face:15,sh:.8,q:'Haad Khom Beach Koh Phangan',entry:'In der Mitte der Bucht über Sand rein, nicht an den Rändern. Das Riff liegt an den Seiten der Bucht. Flossen erst im brusttiefen Wasser anziehen.'},
+ {name:'Chaloklum',near:'vor Ort',coast:'N',face:0,sh:.9,q:'Chaloklum Beach Koh Phangan',entry:GEN},
+ {name:'Haad Salad',near:'ca. 15 Min. mit dem Roller',coast:'W',face:300,sh:.7,q:'Haad Salad Beach Koh Phangan',entry:GEN},
+ {name:'Haad Yao',coast:'W',face:270,sh:.7,q:'Haad Yao Beach Koh Phangan',entry:GEN},
+ {name:'Haad Chao Phao',coast:'W',face:255,sh:.85,q:'Haad Chao Phao Koh Phangan',entry:GEN},
+ {name:'Bottle Beach',near:'Longtail-Boot ab Chaloklum',coast:'N',face:0,sh:.4,q:'Bottle Beach Koh Phangan',entry:GEN},
+ {name:'Thong Nai Pan Noi',coast:'E',face:60,sh:.5,q:'Thong Nai Pan Noi Koh Phangan',entry:GEN}
+];
+const DIRS=['N','NO','O','SO','S','SW','W','NW'];
+const dirTxt=d=>DIRS[Math.round(((d%360)+360)%360/45)%8];
+const clamp=x=>Math.max(0,Math.min(1,x));
+const fmt=(x,n=1)=>x==null||isNaN(x)?'–':x.toFixed(n).replace('.',',');
+const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
+const tLabel=k=>{const d=new Date(k+':00Z');return WD[d.getUTCDay()]+' '+k.slice(11,16)};
+const nowKey=()=>new Date().toLocaleString('sv-SE',{timeZone:'Asia/Bangkok'}).slice(0,13).replace(' ','T')+':00';
+const arrow=d=>`<svg class="arr" viewBox="0 0 14 14" style="transform:rotate(${d+180}deg)"><path d="M7 13V2M3 6l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+let D=null,sel=0;const open=new Set();
+const getNote=n=>{try{return localStorage.getItem('note:'+n)||''}catch(e){return ''}};
+const setNote=(n,v)=>{try{v?localStorage.setItem('note:'+n,v):localStorage.removeItem('note:'+n)}catch(e){}};
+const esc=t=>t.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const entryOf=sp=>{const n=getNote(sp.name);return n?esc(n):sp.entry};
+const moonAge=day=>{const t=Date.parse(day+'T05:00:00Z'),ref=Date.UTC(2000,0,6,18,14);return(((t-ref)/864e5)%29.530589+29.530589)%29.530589};
+const tideKind=day=>{const a=moonAge(day);if(a<=3.5||a>=28.8||(a>=13.8&&a<=18.3))return 'spring';if((a>=6.4&&a<=10.4)||(a>=21.5&&a<=25.5))return 'neap';return ''};
+const kindTxt={spring:'Ebbe extra flach, Flut extra hoch',neap:'Wasserstand schwankt kaum'};
+const $=id=>document.getElementById(id);
+
+const mUrl=c=>`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&hourly=wave_height,wave_direction,wave_period,sea_level_height_msl&timezone=Asia%2FBangkok&past_days=1&forecast_days=3`;
+const wUrl=`https://api.open-meteo.com/v1/forecast?latitude=${WX.lat}&longitude=${WX.lon}&hourly=wind_speed_10m,wind_direction_10m,precipitation&daily=sunrise,sunset&timezone=Asia%2FBangkok&past_days=1&forecast_days=3&wind_speed_unit=kmh`;
+const getJ=async u=>{const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()};
+
+async function load(){
+  $('upd').textContent='Lade Daten …';
+  try{
+    const keys=Object.keys(COAST);
+    const [w,...ms]=await Promise.all([getJ(wUrl),...keys.map(k=>getJ(mUrl(COAST[k])))]);
+    const marine={};keys.forEach((k,i)=>marine[k]=ms[i].hourly);
+    // Fehlende Küstendaten mit einer anderen Küste auffüllen
+    const ok=keys.filter(k=>marine[k].wave_height.some(v=>v!=null));
+    keys.forEach(k=>{if(!ok.includes(k)&&ok.length)marine[k]=marine[ok[0]]});
+    const tideSrc=['W','N','E'].find(k=>marine[k].sea_level_height_msl&&marine[k].sea_level_height_msl.some(v=>v!=null));
+    D={w,marine,tide:tideSrc?marine[tideSrc].sea_level_height_msl:null,times:w.hourly.time};
+    $('err').style.display='none';
+    $('upd').textContent='Stand: '+new Date().toLocaleTimeString('de-DE',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'})+' Uhr';
+    render();
+  }catch(e){
+    $('err').style.display='block';
+    $('err').textContent='Daten konnten nicht geladen werden ('+e.message+'). Internet prüfen und auf „Aktualisieren“ tippen.';
+    $('upd').textContent='Keine Daten';
+  }
+}
+
+function idxOf(key,arr){return arr.indexOf(key)}
+function isDay(key){
+  const d=D.w.daily,day=key.slice(0,10),i=d.time.indexOf(day);
+  if(i<0)return true;
+  const h=key.slice(11,16);return h>=d.sunrise[i].slice(11,16)&&h<d.sunset[i].slice(11,16);
+}
+function tideInfo(i){
+  const s=D.tide;if(!s||s[i]==null)return null;
+  const vals=s.filter(v=>v!=null),mn=Math.min(...vals),mx=Math.max(...vals);
+  const t=mx>mn?(s[i]-mn)/(mx-mn):.5;
+  const rising=s[i+1]!=null?s[i+1]>s[i]:false;
+  return {t,rising,lvl:s[i]};
+}
+function score(sp,i){
+  const m=D.marine[sp.coast],w=D.w.hourly;
+  const wh=m.wave_height[i],wd=m.wave_direction[i];
+  const f=d=>.15+.85*Math.max(0,Math.cos((d-sp.face)*Math.PI/180));
+  const effW=wh==null?.3:wh*f(wd??sp.face);
+  const waveS=clamp(1-effW/.8);
+  const effWind=w.wind_speed_10m[i]*f(w.wind_direction_10m[i]);
+  const windS=clamp(1-effWind/25);
+  const ti=tideInfo(i),kd=tideKind(D.times[i].slice(0,10));
+  let tideS=ti?clamp(1-sp.sh*(1-ti.t)*(kd==='spring'?1.25:1)):.6;
+  if(kd==='neap')tideS=.5*tideS+.35;
+  let cur=false;
+  if(sp.cur&&D.tide){const s=D.tide,r=k=>s[k]!=null&&s[k+1]!=null?Math.abs(s[k+1]-s[k]):0;let mr=0;for(let k=0;k<s.length-1;k++)mr=Math.max(mr,r(k));cur=mr>0&&r(i)>.6*mr}
+  let rain=0;for(let j=Math.max(0,i-24);j<=i;j++)rain+=w.precipitation[j]||0;
+  const visS=clamp(1-rain/30);
+  let total=100*(.4*waveS+.2*windS+.25*tideS+.15*visS)*Math.min(1,waveS*2+.1)*(cur?.8:1);
+  return {cur,kd,total:Math.round(total),wh,wd,effW,wind:w.wind_speed_10m[i],windD:w.wind_direction_10m[i],ti,rain,day:isDay(D.times[i])};
+}
+const verdict=s=>s>=70?['Gut','var(--good)']:s>=45?['Okay','var(--ok)']:['Lieber nicht','var(--bad)'];
+const tideTxt=ti=>ti?(ti.t>.66?'Wasser hoch':ti.t>.33?'Wasser mittel':'Wasser niedrig')+(ti.rising?', steigend':', fallend'):'Wasserstand unbekannt';
+const mapUrl=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+
+function bestTime(sp,i0){
+  let best=null;
+  for(let i=i0;i<Math.min(D.times.length,i0+48);i++){
+    if(!isDay(D.times[i]))continue;
+    const s=score(sp,i).total;if(!best||s>best.s)best={s,i};
+  }
+  return best;
+}
+
+function render(){
+  if(!D)return;
+  const i0=Math.max(0,idxOf(nowKey(),D.times));
+  const i=i0+sel,key=D.times[i];
+  $('tlabel').textContent=sel===0?'Jetzt · '+tLabel(key):tLabel(key);
+  const rows=SPOTS.map(sp=>({sp,r:score(sp,i),b:bestTime(sp,i0)})).sort((a,b)=>b.r.total-a.r.total);
+  const top=rows[0],[v]=verdict(top.r.total);
+  $('hero').innerHTML=`<div class="lbl">${sel===0?'Bester Spot jetzt':'Bester Spot um '+tLabel(key)}${top.r.day?'':' · es ist dunkel'}</div>
+   <div class="name">${top.sp.name}</div>
+   <div class="row"><span class="score">${top.r.total}</span><span class="verdict">${v}</span></div>
+   <div class="chips">
+    <span class="chip">${arrow(top.r.wd||0)} Welle ${fmt(top.r.wh)} m aus ${dirTxt(top.r.wd||0)}</span>
+    <span class="chip">${arrow(top.r.windD||0)} Wind ${fmt(top.r.wind,0)} km/h aus ${dirTxt(top.r.windD||0)}</span>
+    <span class="chip">${tideTxt(top.r.ti)}</span>
+    ${top.r.kd==='spring'?`<span class="chip hot">${top.r.ti&&top.r.ti.t>.5?'Flut heute extra hoch':'Ebbe heute extra flach'}</span>`:top.r.kd==='neap'?'<span class="chip">Wasser schwankt heute kaum</span>':''}
+    ${top.r.cur?'<span class="chip hot">Starke Strömung an der Sandbank</span>':''}
+    <span class="chip">Regen 24 h: ${fmt(top.r.rain)} mm</span>
+   </div>
+   <div class="entry"><b>Einstieg${getNote(top.sp.name)?' (deine Notiz)':''}:</b> ${entryOf(top.sp)} <a href="${mapUrl(top.sp.q)}">Karte öffnen</a></div>`;
+  $('list').innerHTML=rows.map(({sp,r,b})=>{const [vt,c]=verdict(r.total);return `<div class="spot">
+    <div class="num" style="color:${c}">${r.total}</div>
+    <div><div class="n">${sp.name} <span class="meta">· ${vt}</span></div>
+     <div class="bar"><i style="width:${r.total}%;background:${c}"></i></div>
+     <div class="meta">Welle an diesem Strand ca. ${fmt(r.effW)} m · ${tideTxt(r.ti)}${b?` · Beste Zeit: ${tLabel(D.times[b.i])} (${b.s})`:''}${r.cur?' · <b style="color:var(--coral)">Starke Strömung an der Sandbank</b>':''}</div>
+     <details data-n="${esc(sp.name)}" ${open.has(sp.name)?'open':''}><summary>Einstieg &amp; Notiz</summary><p style="margin:6px 0">${sp.entry} <a href="${mapUrl(sp.q)}">Karte öffnen</a></p>
+      <label class="meta" for="n-${SPOTS.indexOf(sp)}">Deine Notiz (ersetzt oben den Tipp)</label>
+      <textarea id="n-${SPOTS.indexOf(sp)}" data-n="${esc(sp.name)}" rows="2" placeholder="z. B. Einstieg links vom Restaurant">${esc(getNote(sp.name))}</textarea></details></div></div>`}).join('');
+  renderCl(i0);
+  drawTide(i0);
+  const ti=tideInfo(i);
+  let nh=null;const s=D.tide;
+  if(s)for(let j=i+1;j<s.length-1;j++){if(s[j]!=null&&s[j]>=s[j-1]&&s[j]>=s[j+1]){nh=j;break}}
+  $('tidetxt').textContent=tideTxt(ti)+(nh!=null?' · Nächste Flut ca. '+tLabel(D.times[nh])+' Uhr':'');
+}
+
+function windows(sp,day,i0){
+  let best=null,cur=null,mx=-1;
+  for(let h=7;h<=17;h++){
+    const k=day+'T'+String(h).padStart(2,'0')+':00',i=D.times.indexOf(k);
+    if(i<0||i<i0||!isDay(k)){cur=null;continue}
+    const sc=score(sp,i).total;mx=Math.max(mx,sc);
+    if(sc>=70){if(!cur)cur={a:h,b:h,m:sc};else{cur.b=h;cur.m=Math.max(cur.m,sc)}if(!best||cur.b-cur.a>best.b-best.a||(cur.b-cur.a===best.b-best.a&&cur.m>best.m))best={...cur}}
+    else cur=null;
+  }
+  if(best)return `${best.a}–${best.b+1} Uhr (bis ${best.m})`;
+  if(mx<0)return 'vorbei';
+  return mx>=45?'nur okay, bestenfalls '+mx:'kein gutes Fenster';
+}
+function renderCl(i0){
+  const today=D.times[i0].slice(0,10),tmr=D.times.find(k=>k.slice(0,10)>today)?.slice(0,10);
+  const days=[['Heute',today],['Morgen',tmr]].filter(d=>d[1]);
+  const cl=SPOTS.filter(sp=>sp.near);
+  const hrs='<div class="hrs"><span></span>'+Array.from({length:11},(_,h)=>`<span>${(h+7)%3===0?h+7:''}</span>`).join('')+'</div>';
+  const kinds=days.filter(([,d])=>tideKind(d)).map(([lb,d])=>`<span class="win"><b>${lb}:</b><span class="tag ${tideKind(d)==='spring'?'hot':''}">${kindTxt[tideKind(d)]}</span></span>`).join(' ');
+  $('cl').innerHTML=(kinds?`<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px">${kinds}</div>`:'')+cl.map(sp=>`<div class="cl"><div class="n"><b>${sp.name}</b> <span class="meta">· ${sp.near}</span></div>
+   ${days.map(([lb,day])=>`<div class="win"><b>${lb}:</b> ${windows(sp,day,i0)}</div>`).join('')}
+   ${hrs}${days.map(([lb,day])=>`<div class="strip"><span>${lb}</span>${Array.from({length:11},(_,h)=>{
+     const k=day+'T'+String(h+7).padStart(2,'0')+':00',i=D.times.indexOf(k);
+     if(i<0)return '<span></span>';
+     const sc=score(sp,i).total,[vt,c]=verdict(sc),past=i<i0;
+     return `<button type="button" class="${past?'past':''}" style="background:${c}" data-i="${i-i0}" aria-label="${sp.name} ${tLabel(k)}: ${sc}, ${vt}" ${past?'disabled':''}></button>`}).join('')}</div>`).join('')}</div>`).join('');
+}
+function drawTide(i0){
+  const svg=$('tide'),W=svg.clientWidth,H=svg.clientHeight;if(!W||!D.tide)return;
+  const n=48,s=D.tide.slice(i0,i0+n),vals=s.filter(v=>v!=null);if(!vals.length){svg.innerHTML='';return}
+  const mn=Math.min(...vals),mx=Math.max(...vals),pad=18;
+  const x=k=>k/(n-1)*W,y=v=>pad+(1-(v-mn)/((mx-mn)||1))*(H-pad*2-14);
+  let night='';
+  for(let k=0;k<n;k++){const key=D.times[i0+k];if(key&&!isDay(key))night+=`<rect x="${x(k)-W/(n-1)/2}" y="0" width="${W/(n-1)+1}" height="${H-14}" fill="currentColor" opacity=".07"/>`}
+  const pts=s.map((v,k)=>v==null?null:`${x(k).toFixed(1)},${y(v).toFixed(1)}`).filter(Boolean);
+  const area=`M0,${H-14} L${pts.join(' L')} L${W},${H-14}Z`;
+  let ticks='';
+  for(let k=0;k<n;k++){const key=D.times[i0+k];if(key&&key.slice(11,13)==='00')ticks+=`<text x="${x(k)+3}" y="${H-2}" font-size="12" fill="currentColor" opacity=".6">${WD[new Date(key+':00Z').getUTCDay()]}</text><line x1="${x(k)}" x2="${x(k)}" y1="0" y2="${H-14}" stroke="currentColor" opacity=".2"/>`}
+  let tp='';
+  for(let k=1;k<n-1;k++){const v=s[k],a=s[k-1],b=s[k+1];if(v==null||a==null||b==null)continue;
+    const hi=v>=a&&v>b,lo=v<=a&&v<b;if(!hi&&!lo)continue;
+    const sp=tideKind(D.times[i0+k].slice(0,10))==='spring';
+    const tx=Math.max(30,Math.min(W-30,x(k))),ty=hi?y(v)-8:y(v)+16;
+    tp+=`<circle cx="${x(k)}" cy="${y(v)}" r="3.5" fill="var(--sea)"/><text x="${tx}" y="${Math.max(12,Math.min(H-18,ty))}" font-size="12" font-weight="600" text-anchor="middle" fill="${sp?'var(--coral)':'currentColor'}">${hi?'Flut':'Ebbe'} ${D.times[i0+k].slice(11,13)} Uhr</text>`}
+  const sx=x(sel),sv=s[sel];
+  svg.innerHTML=`<g style="color:var(--ink)">${night}${ticks}</g>
+   <path d="${area}" fill="var(--sea2)"/><polyline points="${pts.join(' ')}" fill="none" stroke="var(--sea)" stroke-width="2.5"/>
+   <line x1="${sx}" x2="${sx}" y1="0" y2="${H-14}" stroke="var(--coral)" stroke-width="2"/>
+   <g style="color:var(--ink)">${tp}</g>
+   ${sv!=null?`<circle cx="${sx}" cy="${y(sv)}" r="5" fill="var(--coral)"/>`:''}`;
+}
+
+$('cl').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;sel=Math.min(47,+b.dataset.i);$('slider').value=sel;render();$('hero').scrollIntoView({behavior:'smooth'})});
+$('list').addEventListener('input',e=>{const t=e.target;if(t.tagName==='TEXTAREA')setNote(t.dataset.n,t.value.trim())});
+$('list').addEventListener('change',e=>{if(e.target.tagName==='TEXTAREA')render()});
+$('list').addEventListener('toggle',e=>{const d=e.target;if(d.tagName==='DETAILS')d.open?open.add(d.dataset.n):open.delete(d.dataset.n)},true);
+$('slider').addEventListener('input',e=>{sel=+e.target.value;render()});
+$('now').addEventListener('click',()=>{sel=0;$('slider').value=0;render()});
+$('reload').addEventListener('click',load);
+const ro=new ResizeObserver(()=>{if(D)drawTide(Math.max(0,idxOf(nowKey(),D.times)))});ro.observe($('tide'));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});
+setInterval(load,30*60*1000);
+load();
+}
+</script>
+</body>
+</html>

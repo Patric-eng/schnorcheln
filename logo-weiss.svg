@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#fff"/>
+  <!-- Band -->
+  <rect x="58" y="256" width="396" height="24" rx="12" fill="#000"/>
+  <!-- Schnorchel -->
+  <path d="M418 120 V352 q0 58 -58 58 h-40" fill="none" stroke="#000" stroke-width="26" stroke-linecap="round"/>
+  <!-- Maske -->
+  <path d="M108 236 q0-48 48-48 h200 q48 0 48 48 v58 q0 56 -56 56 h-46 q-14 0 -22 -12 l-14 -22 q-10 -14 -20 0 l-14 22 q-8 12 -22 12 h-46 q-56 0 -56 -56 z" fill="#000" stroke="#fff" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M138 240 q0-22 22-22 h78 q8 0 8 8 v84 q0 8 -8 8 h-50 q-50 0 -50 -50 z" fill="#fff"/>
+  <path d="M374 240 q0-22 -22-22 h-78 q-8 0 -8 8 v84 q0 8 8 8 h50 q50 0 50 -50 z" fill="#fff"/>
+  <!-- Glanz -->
+  <path d="M162 250 l26 -12" stroke="#000" stroke-width="11" stroke-linecap="round"/>
+</svg>
